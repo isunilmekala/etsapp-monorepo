@@ -9,7 +9,7 @@ import { FormControlBase, DyFormBuilderService } from 'dynamic-forms';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit {
-  title = "ets";
+  title = "etsapp";
   MPDRequestTrackingFormJson: Array<never> = [];
   MPDRequestTrackingFormGroup!: FormGroup;
   MPDRequestTrackingFormElements: FormControlBase<any>[] = [];
