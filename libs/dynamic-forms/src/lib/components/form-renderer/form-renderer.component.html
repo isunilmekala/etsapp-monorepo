@@ -1,0 +1,58 @@
+<div *ngIf="dynamicFormGroup" class="lib-form-renderer-container">
+  <form [formGroup]="dynamicFormGroup">
+    <div class="row" *ngIf="mode !== 'create'">
+      <lib-elements-renderer *ngFor="let element of controls" [control]="element" [dynamicFormGroup]="dynamicFormGroup"
+        [ngClass]="{'col-md-12': element.layout === 'row', 
+        'col-md-6': element.layout  === 'column', 
+        'col-md-3': element.layout  === 'col_25',
+        'col-md-4': element.layout  === 'col_33'}" [hidden]="element.hidden" (elementAdded)="handleSubs($event)"
+        [typeaheadSearchFn]="typeaheadSearchFn" [typeaheadResultFormatterFn]="typeaheadResultFormatterFn"
+        [typeaheadTags]="typeaheadTags" (onSelectItemEvent)="selectItemEvent($event)"
+        (tagRemoved)="onTagRemoved($event)">
+      </lib-elements-renderer>
+    </div>
+    <div class="row" *ngIf="mode === 'create'">
+      <lib-elements-renderer *ngFor="let element of controls" [control]="element" [dynamicFormGroup]="dynamicFormGroup"
+        [ngClass]="{'col-md-12': element.layout === 'row', 
+            'col-md-6': element.layout  === 'column', 
+            'col-md-3': element.layout  === 'col_25',
+            'col-md-4': element.layout  === 'col_33'}" [hidden]="element.hidden" (elementAdded)="handleSubs($event)"
+        [typeaheadSearchFn]="typeaheadSearchFn" [typeaheadResultFormatterFn]="typeaheadResultFormatterFn"
+        [typeaheadTags]="typeaheadTags" (onSelectItemEvent)="selectItemEvent($event)"
+        (tagRemoved)="onTagRemoved($event)">
+      </lib-elements-renderer>
+    </div>
+
+    <!-- <div class="col-sm-12" *ngIf="mode !== 'create'">
+      <button class="btn btn-secondary" type="button" (click)="navigate()">Back</button> &nbsp;&nbsp;
+      <button class="btn btn-primary" type="submit" [disabled]="!form.valid" (click)="save()">Save</button>&nbsp;&nbsp;
+      <button class="btn btn-outline-primary" type="button" (click)="open(content)">JSON Schema</button>
+    </div> -->
+  </form>
+</div>
+<div *ngIf="payLoad" class="col-md-12">
+  <hr />
+  <h4>Saved Form</h4>
+  <div class="payLoad">
+    {{payLoad}}
+  </div>
+</div>
+<!--<div *ngIf="jsonPayload" class="col-md-12">
+  <hr/>
+  <h4>JSON Schema</h4>
+  <div [innerHtml]="jsonPayload" class="well jsonPayload"></div>
+</div>-->
+<ng-template #content let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h5 class="modal-title">JSON Schema</h5>
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div [innerHtml]="jsonPayload" class="well jsonPayload"></div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="c('Close click')">Close</button>
+  </div>
+</ng-template>

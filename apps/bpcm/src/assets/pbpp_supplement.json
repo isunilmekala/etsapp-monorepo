@@ -1,0 +1,105 @@
+[
+    {
+        "key": "parolee",
+        "label": "Parolee:",
+        "type": "text",        
+        "value": "",
+        "place_holder": "Enter Parolee",
+        "validations":{
+            "required": true,
+            "min_length": 1,
+            "max_length": 20,
+            "pattern": ""
+        }       
+    },
+    {
+        "key": "institution",
+        "label": "Institution Number:",
+        "type": "number",
+        "value": "",
+        "place_holder": "Enter Institution Number",     
+        "validations": {
+            "required": true
+        }
+    },
+    {
+        "key": "parolenumber",
+        "label": "Parole Number:",
+        "type": "number",
+        "value": "",
+        "place_holder": "Enter Parole Number",     
+        "validations": {
+            "required": true
+        }
+    },
+    {
+        "key": "date_of_hearing",
+        "label": "Date of Hearing:",
+        "type": "date",
+        "value": "",
+        "place_holder": "",
+        "order": 7,
+        "min": "2000-12-31",
+        "max": "2020-12-31",
+        "validations": {
+            "required": false
+        }
+    },
+    {
+        "key": "location",
+        "label": "Location of Hearing:",
+        "type": "text",        
+        "value": "",
+        "place_holder": "Enter Location",        
+        "validations":{
+            "required": false,
+            "min_length": 1,            
+            "pattern": ""
+        }       
+    },
+    {
+        "key": "hearing_type",
+        "label": "Type of Hearing:",
+        "type": "checkbox",
+        "place_holder": "", 
+        "remote_options_url": "",
+        "options": [
+            {
+                "key": "violation",
+                "value": "Violation"
+            },
+            {
+                "key": "revocation",
+                "value": "Revocation"
+            }
+        ],
+        "validations":{
+            "required": false            
+        } 
+    },
+    {
+        "key": "panel_member",
+        "label": "Panel Member:",
+        "type": "text",        
+        "value": "",
+        "place_holder": "Enter Panel Member Name",        
+        "validations":{
+            "required": false,
+            "min_length": 1,            
+            "pattern": ""
+        }       
+    },
+    {
+        "key": "final_date",
+        "label": "Date:",
+        "type": "date",
+        "value": "",
+        "place_holder": "",
+        "order": 7,
+        "min": "2000-12-31",
+        "max": "2020-12-31",
+        "validations": {
+            "required": false
+        }
+    }
+]

@@ -1,0 +1,13 @@
+<nav ngbNav #nav="ngbNav" class="nav-tabs">
+	<ng-container ngbNavItem *ngFor="let x of control.subComponents" class="nav-class">
+		<a ngbNavLink>{{x.label}}</a>
+		<ng-template ngbNavContent>
+			<!-- <tab-component [control]="x" [form]="form.controls[x.key]" (elementAdded)="handleSubElements($event)"></tab-component> -->
+
+			Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequatur quod tempore aliquid, enim atque minima a
+			pariatur dolore expedita. Quos dolore, magnam distinctio consequatur fugiat dicta accusamus eos hic maiores.
+		</ng-template>
+	</ng-container>
+</nav>
+
+<div [ngbNavOutlet]="nav" class="lib-tabContent-cls"></div>

@@ -1,0 +1,320 @@
+<div
+  *ngIf="control.type !== 'checkbox' && control.type !== 'radio'"
+  class="lib-element-renderer-container"
+  [ngClass]="layoutClass"
+  [formGroup]="dynamicFormGroup"
+>
+  <label
+    *ngIf="
+      control.label !== '' &&
+      control.labelOrientation === 'up' &&
+      !control.label.includes('Tabs') &&
+      !control.label.includes('Panel')
+    "
+    [attr.for]="control.key"
+    [ngClass]="{ required: control.validations.required === true }"
+    >{{ control.label }}</label
+  >
+  <hr *ngIf="control.requiredDivider && control.labelOrientation === 'up'" />
+  <div [ngSwitch]="control.type">
+    <input
+      class="form-control"
+      *ngSwitchCase="'text'"
+      [formControlName]="control.key"
+      [id]="control.key"
+      [type]="control.type"
+      [placeholder]="control.placeHolder"
+      [ngClass]="{
+        'has-error': !dynamicFormGroup.controls[control.key].valid && dynamicFormGroup.controls[control.key].touched
+      }"
+      (focusout)="onFocusOutFn(control)"
+    />
+
+    <input
+      class="form-control"
+      *ngSwitchCase="'number'"
+      [formControlName]="control.key"
+      [id]="control.key"
+      [type]="control.type"
+      [min]="control.min"
+      [max]="control.max"
+    />
+
+    <input
+      class="form-control"
+      *ngSwitchCase="'email'"
+      [formControlName]="control.key"
+      [id]="control.key"
+      [type]="control.type"
+      [placeholder]="control.placeHolder"
+      validateEmail
+    />
+
+    <input
+      class="form-control"
+      *ngSwitchCase="'password'"
+      [formControlName]="control.key"
+      [id]="control.key"
+      [type]="control.type"
+      [placeholder]="control.placeHolder"
+    />
+
+    <input
+      class="form-control"
+      *ngSwitchCase="'date'"
+      [formControlName]="control.key"
+      [id]="control.key"
+      [type]="control.type"
+      [placeholder]="control.placeHolder"
+      [min]="control.min"
+      [max]="control.max"
+    />
+
+    <input
+      class="form-control"
+      *ngSwitchCase="'file'"
+      [formControlName]="control.key"
+      [id]="control.key"
+      [type]="control.type"
+      [placeholder]="control.placeHolder"
+    />
+
+    <!-- <ng-template #rt let-r="result" let-t="term">
+				<img [src]="'https://upload.wikimedia.org/wikipedia/commons/thumb/' + r['flag']" class="me-1" style="width: 16px" />
+				<ngb-highlight [result]="r.name" [term]="t"></ngb-highlight>
+				{{r.username}}
+			</ng-template> -->
+    <!-- <input *ngSwitchCase="'typeahead'" type="text" [formControlName]="control.key" [id]="control.key"
+				[placeholder]="control.placeHolder" class="form-control typeaheadInputCls" [ngbTypeahead]="typeaheadSearchFn"
+				[resultFormatter]="typeaheadResultFormatterFn" [editable]="false" (selectItem)="selectItem($event)" /> -->
+
+    <div class="app-tags-container" *ngSwitchCase="'typeahead'">
+      <div class="app-tag-input-wrapper">
+        <input
+          type="text"
+          class="form-control typeaheadInputCls"
+          #typeaheadInput
+          [formControlName]="control.key"
+          [id]="control.key"
+          [placeholder]="control.placeHolder"
+          [ngbTypeahead]="typeaheadSearchFn"
+          (selectItem)="selectItem($event, typeaheadInput)"
+          [resultFormatter]="typeaheadResultFormatterFn"
+          [editable]="false"
+        />
+      </div>
+      <div class="app-tags mt-1">
+        <!-- <app-tag *ngFor="let tag of tags" [tag]="tag" (closed)="tagRemoved.emit($event)"></app-tag> -->
+        <div
+          [style.background-color]="tag.backgroundColor"
+          [style.color]="tag.color"
+          class="app-tag"
+          *ngFor="let tag of typeaheadTags"
+          class="app-tag"
+        >
+          {{ tag.name }}
+          <span class="ml-3" (click)="tagRemoved.emit(tag)"></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- <ng-multiselect-dropdown
+      *ngSwitchCase="'multiselect'"
+      [settings]="dropdownSettings"
+      [data]="control.remoteSelectOptions"
+    >
+    </ng-multiselect-dropdown> -->
+
+    <canvas class="form-control canvas" paint *ngSwitchCase="'sign'"></canvas>
+
+    <select
+      class="form-control"
+      [id]="control.key"
+      *ngSwitchCase="'dropdown'"
+      [formControlName]="control.key"
+      (ngModelChange)="onSelectChange($event)"
+      [ngClass]="{
+        'has-error': !dynamicFormGroup.controls[control.key].valid && dynamicFormGroup.controls[control.key].touched 
+      }"
+    >
+      <option *ngFor="let opt of control.remoteSelectOptions" [value]="opt.key">{{ opt.value }}</option>
+    </select>
+
+    <textarea
+      class="form-control"
+      [id]="control.key"
+      *ngSwitchCase="'textarea'"
+      [formControlName]="control.key"
+      [rows]="control.rows"
+      [cols]="control.columns"
+      [placeholder]="control.placeHolder"
+      [ngClass]="{
+        'has-error': !dynamicFormGroup.controls[control.key].valid && dynamicFormGroup.controls[control.key].touched
+      }"
+    >
+    </textarea>
+
+    <input
+      *ngSwitchCase="'currency'"
+      class="form-control"
+      [formControlName]="control.key"
+      [id]="control.key"
+      type="text"
+      [placeholder]="control.placeHolder"
+      currencyFormatter
+      [ngClass]="{
+        'has-error': !dynamicFormGroup.controls[control.key].valid && dynamicFormGroup.controls[control.key].touched
+      }"
+    />
+
+    <input
+      *ngSwitchCase="'phone'"
+      class="form-control"
+      [formControlName]="control.key"
+      [id]="control.key"
+      type="text"
+      [placeholder]="control.placeHolder"
+      phoneFormatter
+      [ngClass]="{
+        'has-error': !dynamicFormGroup.controls[control.key].valid && dynamicFormGroup.controls[control.key].touched
+      }"
+    />
+    <div class="form-group" *ngSwitchCase="'tabs'">
+      <lib-tabs
+        [control]="control"
+      ></lib-tabs>
+    </div>
+    <!-- <div *ngSwitchCase="'panel'">
+				<panel-component [control]="control" [form]="dynamicFormGroup.controls[control.key]"
+					(elementAdded)="handleSubElements($event)"></panel-component>
+			</div>
+			<div *ngSwitchCase="'login-component'">
+				<loginpanel-component [loginComponent]="control"></loginpanel-component>
+			</div>
+			<div *ngSwitchCase="'credit-card'">
+				<creditcard-component [loginComponent]="control"></creditcard-component>
+			</div>
+			<div *ngSwitchCase="'dashboard'">
+				<dashboard-component [control]="control" [form]="dynamicFormGroup.controls[control.key]"
+					(elementAdded)="handleSubElements($event)"></dashboard-component>
+			</div>
+			<div *ngSwitchCase="'dropdown-special'">
+				<dropdown-special [controlComponent]="control"></dropdown-special>
+			</div>
+			<div *ngSwitchCase="'conditional-dropdowns'">
+				<conditional-dropdowns [controlComponent]="control"></conditional-dropdowns>
+			</div>
+			<div *ngSwitchCase="'widget1'">
+				<widget1 [control]="control"></widget1>
+			</div>
+			<div *ngSwitchCase="'widget4'">
+				<widget4 [control]="control"></widget4>
+			</div>
+			<div *ngSwitchCase="'widget6'">
+				<widget6 [control]="control"></widget6>
+			</div>
+			<div *ngSwitchCase="'widget2'">
+				<widget2 [control]="control"></widget2>
+			</div>
+			<div *ngSwitchCase="'widget5'">
+				<widget5 [control]="control"></widget5>
+			</div>
+			<div *ngSwitchCase="'widget7'">
+				<widget7 [control]="control"></widget7>
+			</div>
+			<div *ngSwitchCase="'widget8'">
+				<widget8 [control]="control"></widget8>
+			</div>
+			<div *ngSwitchCase="'widget9'">
+				<widget9 [control]="control"></widget9>
+			</div>
+			<div *ngSwitchCase="'widget10'">
+				<widget10 [control]="control"></widget10>
+			</div>
+			<div *ngSwitchCase="'widget11'">
+				<widget11 [control]="control"></widget11>
+			</div> -->
+    <!-- <div *ngSwitchCase="'location'">
+				<map-location ></map-location>
+			</div>
+			<div *ngSwitchCase="'directions'">
+				<map-directions [zoom]="control.zoom" [origin]="control.origin" [destination]="control.destination"></map-directions>
+			</div> -->
+  </div>
+
+  <div id="no-more-tables" class="control" *ngIf="control.type === 'table'">
+    <table *ngIf="control.tableColumnsRemoteUrl" class="table-bordered table-striped table-condensed cf">
+      <thead>
+        <tr>
+          <th *ngFor="let head of control.tableColumnOptions">{{ head['value'] }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let row of control.tableRowData">
+          <td *ngFor="let head of control.tableColumnOptions">{{ row[head['key']] }}</td>
+        </tr>
+      </tbody>
+    </table>
+    <table *ngIf="!control.tableColumnsRemoteUrl" class="table-bordered table-striped table-condensed cf">
+      <thead>
+        <tr>
+          <th *ngFor="let head of control.tableColumnOptions">{{ head['value'] }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td *ngFor="let row of control.tableRowData">{{ row['value'] }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div
+    class="errorMessage"
+    *ngIf="
+      dynamicFormGroup &&
+      !dynamicFormGroup.controls[control.key].valid && dynamicFormGroup.controls[control.key].touched
+    "
+  >
+    <div *ngIf="dynamicFormGroup.controls[control.key].hasError('required')">{{ control.label }} is required</div>
+
+    <div *ngIf="dynamicFormGroup.controls[control.key].hasError('minlength')">
+      {{ control.label }} should contain atleast
+
+      {{ control.validations.min_length }} letters
+    </div>
+
+    <div *ngIf="dynamicFormGroup.controls[control.key].hasError('maxlength')">
+      {{ control.label }} should not be more than
+
+      {{ control.validations.max_length }} letters
+    </div>
+
+    <div *ngIf="dynamicFormGroup.controls[control.key].hasError('pattern')">
+      {{ control.label }} should be in the specified format
+    </div>
+
+    <div *ngIf="dynamicFormGroup.controls[control.key].hasError('custom-error')">
+      <!-- {{ dynamicFormGroup.controls[control.key].errors['custom-error']}} -->
+      Define custom error
+    </div>
+  </div>
+</div>
+<div
+  *ngIf="control.type === 'checkbox' || control.type === 'radio'"
+  class="lib-element-renderer-container"
+  [ngClass]="layoutClass"
+  [formGroup]="dynamicFormGroup"
+>
+  <label [attr.for]="control.key">{{ control.label }}</label>
+  <div>
+    <label
+      class="form-control-label"
+      *ngFor="let opt of control.choices"
+      [ngClass]="{ 'col-md-12': opt.layout === 'row', 'col-md-6': opt.layout === 'column' }"
+    >
+      <input [formControlName]="control.key" [id]="control.key" [name]="control.key" [type]="control.type" />
+      {{ opt.value }}
+    </label>
+  </div>
+</div>

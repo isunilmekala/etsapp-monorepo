@@ -1,0 +1,221 @@
+<div class="config-container control">
+  <div class="config-header">
+    {{element.label}}
+    <!--*ngIf="element.type === 'tab'"-->
+    <!--<button class="btn btn-primary pull-right" *ngIf="!isEditMode" (click)="isEditMode=true">Edit</button>-->
+    <!--<button class="btn btn-primary pull-right" *ngIf="isEditMode" (click)="saveConfig()">Save</button>-->
+    <i class="fa fa-floppy-o fa-edit-icon float-right" *ngIf="!isEditMode" aria-hidden="true" (click)="isEditMode=true">
+      Edit</i>
+    <i class="fa fa-floppy-o fa-save-icon float-right" *ngIf="isEditMode" aria-hidden="true" (click)="saveConfig()">
+      Save</i>
+  </div>
+  <div class="config-content" *ngIf="isEditMode">
+    <h4> Basic </h4>
+    <hr />
+    <div class="row mb-2">
+      <div class="form-group col-md-6">
+        <label>Key<input class="form-control" type="text" [(ngModel)]="element.key"></label>
+      </div>
+      <div class="form-group col-md-6">
+        <label>Label<input class="form-control" type="text" [(ngModel)]="element.label"></label>
+      </div>
+      <div class="form-group col-md-6" *ngIf="element.type === 'directions'">
+        <label>Origin<input class="form-control" type="text" [(ngModel)]="element.origin"></label>
+      </div>
+      <div class="form-group col-md-6" *ngIf="element.type === 'directions'">
+        <label>Destination<input class="form-control" type="text" [(ngModel)]="element.destination"></label>
+      </div>
+      <div class="form-group col-md-6"
+        *ngIf="element.type === 'text' || element.type === 'number' || element.type === 'date' ">
+        <label>Place Holder<input class="form-control" type="text" [(ngModel)]="element.placeHolder"> </label>
+      </div>
+      <div class="form-group col-md-6"
+        *ngIf="element.type === 'text' || element.type === 'number' || element.type === 'date' ">
+        <label>Default Value<input class="form-control" type="text" [(ngModel)]="element.value"></label>
+      </div>
+      <div class="form-group col-md-6" *ngIf="element.type === 'textarea'">
+        <label>Rows<input class="form-control" type="number" [(ngModel)]="element.rows"></label>
+      </div>
+      <div class="form-group col-md-6" *ngIf="element.type === 'textarea'">
+        <label>Columns<input class="form-control" type="number" [(ngModel)]="element.columns"></label>
+      </div>
+      <div class="form-group col-md-6" *ngIf="element.type === 'number'|| element.type === 'date'">
+        <label>Min<input class="form-control" type="number" [(ngModel)]="element.min"></label>
+      </div>
+      <div class="form-group col-md-6" *ngIf="element.type === 'number'|| element.type === 'date'">
+        <label>Max<input class="form-control" type="number" [(ngModel)]="element.max"></label>
+      </div>
+      <div class="form-group col-md-6"
+        *ngIf="element.type === 'table' && !(element.tableColumnsRemoteUrl || element.tableDataRemoteUrl)">
+        <label>Table Columns:</label>
+        <div class="form-inline" *ngFor="let col of element.tableColumnOptions; let i = index;">
+          <label class="col-md-3">{{col['key']}}:</label>
+          <input class="form-control" type="text" [(ngModel)]="col['value']">
+          <div class="col-md-6 m-t-10 f-s-14" *ngIf="i === element.tableColumnOptions.length -1"
+            (click)="addTableColumn()"> <i class="icon fa fa-plus-circle"> Add Column</i></div>
+        </div>
+      </div>
+      <div class="form-group col-md-6"
+        *ngIf="element.type === 'table' && !(element.tableColumnsRemoteUrl || element.tableDataRemoteUrl) ">
+        <label>Table Rows:</label>
+        <div class="form-inline" *ngFor="let row of element.tableRowData; let i = index;">
+          <label class="col-md-3">{{row['key']}}:</label>
+          <input class="form-control" type="text" [(ngModel)]="row['value']">
+          <div class="col-md-6 m-t-10 f-s-14" *ngIf="i === element.tableRowData.length -1" (click)="addTableRow()">
+            <i class="icon fa fa-plus-circle"> Add Row</i></div>
+        </div>
+      </div>
+      <div class="form-group col-md-12"
+        *ngIf="element.type === 'table' && (element.tableColumnsRemoteUrl || element.tableDataRemoteUrl)">
+        <label>Remote Url for Columns:</label>
+        <input class="form-control" type="text" [(ngModel)]="element.tableColumnsRemoteUrl">
+      </div>
+      <div class="form-group col-md-12"
+        *ngIf="element.type === 'table' && (element.tableColumnsRemoteUrl || element.tableDataRemoteUrl)">
+        <label>Remote Url for Data:</label>
+        <input class="form-control" type="text" [(ngModel)]="element.tableDataRemoteUrl">
+      </div>
+      <div class="form-group col-md-6" *ngIf="element.type === 'signature' ">
+        <label>Signature Width:</label>
+        <input class="form-control" type="number" [(ngModel)]="element.signatureWidth">
+      </div>
+      <div class="form-group col-md-6" *ngIf="element.type === 'signature' ">
+        <label>Signature Height:</label>
+        <input class="form-control" type="number" [(ngModel)]="element.signatureHeight">
+      </div>
+      <div class="form-group col-md-12"
+        *ngIf="element.type === 'dropdown' || element.type === 'radio' || element.type === 'checkbox'">
+        <label>Options:</label>
+        <div class="form-inline" *ngFor="let choice of element.choices; let i = index;">
+          <label class="col-md-2">{{choice.key}}:</label>
+          <input class="form-control" type="text" [(ngModel)]="choice.value">
+          <select class="form-control" [(ngModel)]="choice.layout" *ngIf="element.type !== 'dropdown'">
+            <option value="row"> Row </option>
+            <option value="column">Column</option>
+          </select>
+          <div class="col-md-2" *ngIf="i === element.choices.length -1" (click)="addOption()"><i
+              class="icon fa fa-plus-circle"></i></div>
+        </div>
+      </div>
+      <div *ngIf="isTabcount" class="row">
+        <div class="form-group col-md-6">
+          <label class="form-control-label">TabsCount</label>
+          <input class="form-control" type="number" [(ngModel)]="element.tabsCount" (change)='tabsInc()'>
+        </div>
+      </div>
+
+      <!-- <div class="form-group col-md-12 mb-4"
+        *ngIf="element.type === 'widget1' || element.type === 'widget2' || element.type === 'widget3' || element.type === 'widget4' || element.type === 'widget5' || element.type === 'widget6' || element.type === 'widget7' || element.type === 'widget8' || element.type === 'widget9' || element.type === 'widget10' || element.type === 'widget11' || element.type === 'widget12'">
+        <div class="row" *ngFor="let widget of element.remoteSelectOptions;">
+          <label class="col-md-12"> <strong> Widget </strong></label>
+          <div class="col-md-6 form-group">
+            <label class="col-md-12 form-control-label">Title
+              <input class="form-control" type="text" [(ngModel)]="widget.stat_title">
+            </label>
+          </div>
+          <div class="col-md-6 form-group">
+            <label class="col-md-12 form-control-label">Number
+              <input class="form-control" type="text" [(ngModel)]="widget.stat_number">
+            </label>
+          </div>
+          <div class="col-md-6 form-group">
+            <label class="col-md-12 form-control-label">Text
+              <input class="form-control" type="text" [(ngModel)]="widget.stat_text">
+            </label>
+          </div>
+          <div class="col-md-6 form-group">
+            <label class="col-md-12 form-control-label">Background Color
+              <input class="form-control" type="text" [(ngModel)]="widget.stat_cls">
+            </label>
+          </div>
+          <div class="col-md-6 form-group" *ngIf="widget.info_title">
+            <label class="col-md-12 form-control-label">Info Title
+              <input class="form-control" type="text" [(ngModel)]="widget.info_title">
+            </label>
+          </div>
+          <div class="col-md-6 form-group" *ngIf="widget.info_text">
+            <label class="col-md-12 form-control-label">Info Text
+              <input class="form-control" type="text" [(ngModel)]="widget.info_text">
+            </label>
+          </div>
+          <div class="col-md-6 form-group" *ngIf="widget.today_val">
+            <label class="col-md-12 form-control-label">Today's Value
+              <input class="form-control" type="text" [(ngModel)]="widget.today_val">
+            </label>
+          </div>
+          <div class="col-md-6 form-group" *ngIf="widget.lastweek_val">
+            <label class="col-md-12 form-control-label">Last Week Value
+              <input class="form-control" type="text" [(ngModel)]="widget.lastweek_val">
+            </label>
+          </div>
+          <hr />
+        </div>
+      </div> -->
+      <div class="form-group col-md-6" *ngIf="hideTabEditElements && hideTabsEditElements ">
+        <label class="form-control-label pr-3">Hidden </label>
+        <input type="checkbox" [(ngModel)]="element.hidden">
+      </div>
+      <div class="form-group col-md-6" *ngIf="hideTabEditElements && hideTabsEditElements">
+        <label class="form-control-label pr-3">Disable</label>
+        <input type="checkbox" [(ngModel)]="element.disable">
+      </div>
+      <div class="form-group col-md-6" *ngIf="hideTabEditElements && hideTabsEditElements">
+        <label class="form-control-label pr-3">Divider Required</label>
+        <input type="checkbox" [(ngModel)]="element.requiredDivider">
+      </div>
+    </div>
+    <div *ngIf="hideTabEditElements" class="mb-2">
+      <h4> Layout </h4>
+      <hr />
+      <div class="row">
+        <div class="form-group col-md-4">
+          <label>Layout</label>
+          <select class="form-control" [(ngModel)]="element.layout">
+            <option value="row"> Row </option>
+            <option value="column"> 2 Columns</option>
+            <option value="col_33"> 3 Columns</option>
+            <option value="col_25"> 4 Columns </option>
+          </select>
+        </div>
+        <div class="form-group col-md-4" *ngIf="hideTabsEditElements">
+          <label>Label Orientation</label>
+          <select class="form-control" [(ngModel)]="element.labelOrientation">
+            <option value="up"> Up </option>
+            <option value="down"> Down</option>
+          </select>
+        </div>
+        <div class="form-group col-md-4" *ngIf="hideTabsEditElements">
+          <label>Label Align</label>
+          <select class="form-control" [(ngModel)]="element.labelAlign">
+            <option value="left"> Left </option>
+            <option value="center"> Center</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="hideTabEditElements && hideTabsEditElements" class="mb-2">
+      <h4> Validations </h4>
+      <hr />
+      <div class="row">
+        <div class="form-group col-md-6" *ngIf="element.type === 'textarea' || element.type === 'text'">
+          <label>Min Length<input class="form-control" type="number"
+              [(ngModel)]="element.validations.min_length"></label>
+        </div>
+        <div class="form-group col-md-6"
+          *ngIf="element.type === 'textarea' || element.type === 'text' || element.type === 'phone'">
+          <label>Max Length<input class="form-control" type="number"
+              [(ngModel)]="element.validations.max_length"></label>
+        </div>
+        <div class="form-group col-md-6"
+          *ngIf="element.type === 'textarea' || element.type === 'email' || element.type === 'phone' || element.type === 'currency'">
+          <label>Desired Pattern<input class="form-control" type="text"
+              [(ngModel)]="element.validations.pattern"></label>
+        </div>
+        <div class="form-group col-md-6">
+          <label class="form-control-label pr-3">Required</label>
+          <input type="checkbox" [(ngModel)]="element.validations.required">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

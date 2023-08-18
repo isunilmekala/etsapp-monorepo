@@ -1,1 +1,17 @@
-<app-nx-welcome></app-nx-welcome> <router-outlet></router-outlet>
+<!-- <router-outlet></router-outlet> -->
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-2">
+      sidebar
+    </div>
+    <div class="vr" style="width: 6px;padding: 0;"></div>
+
+
+    <div class="col-6 text-center">
+      <h4>User Form</h4>
+      <lib-form-renderer [controls]="MPDRequestTrackingFormElements"
+        [dynamicFormGroup]="MPDRequestTrackingFormGroup"></lib-form-renderer>
+    </div>
+  </div>
+
+</div>
